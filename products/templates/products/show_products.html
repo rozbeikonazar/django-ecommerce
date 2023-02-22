@@ -1,0 +1,47 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block navbar %}
+
+<nav>  
+  <ul>
+      {% for category in categories %}
+          <li><a href="{% url 'products:category' category_name=category.name %}">{{ category.name }}</a></li>
+      {% endfor %}
+  </ul>
+</nav>
+{% endblock %}
+
+
+
+
+
+{% block content %}
+
+  <div class="container">
+    <div class="row">
+      {% for product in products %}
+      <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card h-100">
+          <a href="#"><img class="card-img-top" src="{{ product.image.url }}" alt=""></a>
+          <div class="card-body">
+            <h5 class="card-title">
+              <a href="details/{{product.id}}">{{ product.name }}</a>
+            </h5>
+            <p class="card-text">{{ product.price }} Kč</p>
+            <button type="button" class="btn btn-primary">Add to cart</button>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <style>
+    .card-img-top {
+      height: 250px;
+      object-fit: cover;
+    }
+
+  </style>
+
+{% endblock %}
