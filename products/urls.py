@@ -7,6 +7,6 @@ app_name = 'products'
 
 urlpatterns = [
     path('', show_products, name='product_list'),
-    path('details/<int:id>', show_product, name='product_details'),
+    path('details/<slug:slug>', show_product, name='product_details'),
     path('category/<str:category_name>/', show_products, name='category'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

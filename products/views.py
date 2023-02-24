@@ -18,8 +18,8 @@ def show_products(request, category_name=None):
 
 
 
-def show_product(request, id):
-    product = Product.objects.get(id=id)
+def show_product(request, slug):
+    product = Product.objects.get(slug=slug)
     template = loader.get_template('products/product_details.html')
     context = {'product': product}
     return HttpResponse(template.render(context,request))

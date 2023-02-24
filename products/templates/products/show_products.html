@@ -1,19 +1,5 @@
 {% extends 'main.html' %}
 {% load static %}
-{% block navbar %}
-
-<nav>  
-  <ul>
-      {% for category in categories %}
-          <li><a href="{% url 'products:category' category_name=category.name %}">{{ category.name }}</a></li>
-      {% endfor %}
-  </ul>
-</nav>
-{% endblock %}
-
-
-
-
 
 {% block content %}
 
@@ -25,7 +11,7 @@
           <a href="#"><img class="card-img-top" src="{{ product.image.url }}" alt=""></a>
           <div class="card-body">
             <h5 class="card-title">
-              <a href="details/{{product.id}}">{{ product.name }}</a>
+              <a href="{% url 'products:product_details' slug=product.slug %}">{{ product.name }}</a>
             </h5>
             <p class="card-text">{{ product.price }} Kč</p>
             <button type="button" class="btn btn-primary">Add to cart</button>
