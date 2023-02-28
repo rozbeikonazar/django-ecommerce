@@ -1,0 +1,7 @@
+{% block content %}
+  {% if products %} 
+    {% include 'products/show_products.html' %}
+  {% else %}
+    {% include 'products/no_products_found.html'%}
+  {% endif %}
+{% endblock %}

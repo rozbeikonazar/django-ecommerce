@@ -2,12 +2,12 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from .models import Product, Category
 from django.template import loader
-
+from django.db.models import Q
 # Create your views here.
 
 
 def show_products(request, category_name=None):
-    """Show all products"""
+    """Returns all products"""
     products = Product.objects.all()
     categories = Category.objects.all()
 
@@ -29,4 +29,20 @@ def show_product(request, slug):
     template = loader.get_template('products/product_details.html')
     context = {'product': product}
     return HttpResponse(template.render(context,request))
+
+
+
+def search_products(request):
+    """Returns all products that were specified by query"""
+    if request.method == "POST":
+        query = request.POST.get('searched')
+        if query:
+            products = Product.objects.filter(
+                Q(name__contains=query) |
+                Q(description__contains=query) |
+                Q(category__name__contains=query)
+            )
+            categories = Category.objects.all()
+            return render(request, 'products/search_products.html', {'searched': query, 'products': products, 'categories': categories})
+    return render(request, 'products/search_products.html')
 

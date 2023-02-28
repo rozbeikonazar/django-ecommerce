@@ -1,30 +1,47 @@
 {% load static %}
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="{% url 'products:product_list' %}">Logo</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-        <ul class="navbar-nav">
-            {% for category in categories %}    
-            <li class="nav-item"><a class="nav-link" href="{% url 'products:category' category_name=category.name %}">{{ category.name }}</a></li>
-            {% endfor %}
-          <li class="nav-item">
-            <a class="nav-link" href="#">Contact</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Basket</a>
-          </li>
-          <li class="nav-item">
-            <form class="d-flex">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
-          </li>
-        </ul>
-      </div>
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'products:product_list' %}">
+      <img src="{% static 'img/logo.png' %}" alt="Logo" height="30">
+      <span class="ms-2">My Store</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav">
+        {% for category in categories %}
+        <li class="nav-item"><a class="nav-link" href="{% url 'products:category' category_name=category.name %}">{{ category.name }}</a>
+        </li>
+        {% endfor %}
+        <li class="nav-item">
+          <a class="nav-link" href="#">Contact</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Basket</a>
+        </li>
+        <li class="nav-item">
+          
+          <form class="d-flex" method=POST action="{% url 'products:search_products' %}">
+            {% csrf_token %}
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name='searched'>
+            <button class="btn btn-outline-success" type="submit">Search</button>
+          </form>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href='#'>Register</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href='#'>Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i class="bi bi-person-circle"></i>
+          </a>
+        </li>
+      </ul>
     </div>
-  </nav>
-  
+  </div>
+</nav>
