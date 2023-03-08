@@ -8,13 +8,14 @@
 {% block content %}
 
 {% load static %}
-<img src="{% static '33801.jpg' %}" alt="My image">
+
 <div class="container">
   <div class="row">
     {% for product in products %}
     <div class="col-md-3 col-sm-6 mb-4">
       <div class="card h-100">
         <a href="#"><img class="card-img-top" src="{{ product.image.url }}" alt=""></a>
+
         <div class="card-body d-flex flex-column">
           <h5 class="card-title">
             <a href="{% url 'products:product_details' slug=product.slug %}">{{ product.name }}</a>
