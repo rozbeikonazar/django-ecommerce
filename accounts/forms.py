@@ -1,8 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
-
-
+from .models import Profile
 # Create your forms here.
 
 class NewUserForm(UserCreationForm):
@@ -19,3 +18,17 @@ class NewUserForm(UserCreationForm):
 		if commit:
 			user.save()
 		return user
+	
+class UpdateUserForm(forms.ModelForm):
+	name = forms.CharField(max_length=100, required=True)
+	email = forms.EmailField(required=True)
+	class Meta:
+		model = get_user_model()
+		fields = ['name', 'email']
+
+class UpdateProfileForm(forms.ModelForm):
+    profile_image = forms.ImageField()
+
+    class Meta:
+        model = Profile
+        fields = ['profile_image']

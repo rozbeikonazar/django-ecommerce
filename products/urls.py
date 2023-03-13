@@ -1,6 +1,4 @@
 from django.urls import path
-from django.conf import settings
-from django.conf.urls.static import static
 from .views import show_products, show_product, search_products
 
 app_name = 'products'

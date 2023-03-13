@@ -36,3 +36,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+    
+class Profile(models.Model):
+    user = models.OneToOneField(CustomUser, null=True, on_delete=models.CASCADE)
+    profile_image = models.ImageField(default='profile_pic.jpg', null=True, blank=True)                                                                        

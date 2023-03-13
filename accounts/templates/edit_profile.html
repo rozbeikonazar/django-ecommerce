@@ -1,0 +1,66 @@
+{% extends "main.html" %}
+{% block title %}Profile Page{% endblock title %}
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">Profile</div>
+                <div class="card-body">
+                    {% if user_form.errors %}
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <div id="form_errors">
+                            {% for key, value in user_form.errors.items %}
+                            <strong>{{ value }}</strong>
+                            {% endfor %}
+                        </div>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {% endif %}
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="small mb-1" for="name">Username:</label>
+                                    {{ user_form.name }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="small mb-1" for="email">Email:</label>
+                                    {{ user_form.email }}
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <hr>
+                                <div class="form-group">
+                                    <a href="{% url 'accounts:password_change' %}" class="btn btn-primary btn-block">Change Password</a>
+                                </div>
+                                <hr>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="small mb-1" for="profile_image">Profile Image:</label>
+                                    {% if profile_form.instance.profile_image %}
+                                    <img src="{{ profile_form.instance.profile_image.url }}" alt="Profile Image" width="100">
+                                    {% endif %}
+                                    {{ profile_form.profile_image }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                            <button type="reset" class="btn btn-secondary">Reset</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
