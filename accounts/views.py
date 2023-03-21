@@ -5,8 +5,9 @@ from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
-from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.views import PasswordChangeView, PasswordResetView
 from django.contrib.messages.views import SuccessMessageMixin
+from .forms import UpdateUserForm, UpdateProfileForm
 
 #TODO FIX ERROR MESSAGES and add profile functionality
 def register_request(request):
@@ -51,28 +52,32 @@ def logout_request(request):
 def profile_request(request):
 	return render(request=request, template_name='profile.html')
 
-
-from .forms import UpdateUserForm, UpdateProfileForm
-
-
 @login_required
 def edit_profile(request):
-    if request.method == 'POST':
-        user_form = UpdateUserForm(request.POST, instance=request.user)
-        profile_form = UpdateProfileForm(request.POST, request.FILES, instance=request.user.profile)
+	if request.method == 'POST':
+		user_form = UpdateUserForm(request.POST, instance=request.user)
+		profile_form = UpdateProfileForm(request.POST, request.FILES, instance=request.user.profile)
+		if user_form.is_valid() and profile_form.is_valid():
+			user_form.save()
+			profile_form.save()
+			messages.success(request, 'Your profile is updated successfully')
+	else:
+		user_form = UpdateUserForm(instance=request.user)
+		profile_form = UpdateProfileForm(instance=request.user.profile)
 
-        if user_form.is_valid() and profile_form.is_valid():
-            user_form.save()
-            profile_form.save()
-            messages.success(request, 'Your profile is updated successfully')
-    else:
-        user_form = UpdateUserForm(instance=request.user)
-        profile_form = UpdateProfileForm(instance=request.user.profile)
-
-    return render(request, 'edit_profile.html', {'user_form': user_form, 'profile_form': profile_form})
-
+	return render(request, 'edit_profile.html', {'user_form': user_form, 'profile_form' : profile_form})
 
 class ChangePasswordView(SuccessMessageMixin, PasswordChangeView):
     template_name = 'change_password.html'
     success_message = "Successfully Changed Your Password"
     success_url = reverse_lazy('accounts:edit_profile')
+    
+
+class PasswordResetView(SuccessMessageMixin, PasswordResetView):
+	template_name = 'reset_password.html'
+	email_template_name = 'reset_password_email.html'
+	success_message = "We've emailed you instructions for setting your password, " \
+                      "if an account exists with the email you entered. You should receive them shortly." \
+                      " If you don't receive an email, " \
+                      "please make sure you've entered the address you registered with, and check your spam folder."
+	success_url = reverse_lazy('products:product_list')

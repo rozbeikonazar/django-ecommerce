@@ -18,6 +18,7 @@
     <button class="btn btn-primary" type="submit">Login</button>
   </form>
   <p class="text-center">Don't have an account? <a href="{%url 'accounts:register' %}">Create an account</a>.</p>
+  <p class="text-center">Forgot Password? <a href="{% url 'accounts:password_reset'%}"> Reset password</a>. </p> 
 </div>
 
 {% if messages %}
