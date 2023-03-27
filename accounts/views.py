@@ -1,8 +1,7 @@
 from django.shortcuts import  render, redirect
-from .forms import NewUserForm
+from .forms import AuthenticationForm, NewUserForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
-from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.contrib.auth.views import PasswordChangeView, PasswordResetView
@@ -26,12 +25,14 @@ def register_request(request):
 
 def login_request(request):
 	#TODO add 2fa on every login request via email. Change username to email to make it more readable
+	#https://python.plainenglish.io/adding-a-custom-authentication-backend-in-django-f0376937cf55
 	if request.method == "POST":
 		form = AuthenticationForm(request, data=request.POST)
 		if form.is_valid():
-			username = form.cleaned_data.get('username')
+			print(f'form:  {form}')
+			email = form.cleaned_data.get('username')
 			password = form.cleaned_data.get('password')
-			user = authenticate(username=username, password=password)
+			user = authenticate(username=email, password=password)
 			if user is not None:
 				login(request, user)
 				return redirect("products:product_list")
