@@ -21,7 +21,7 @@
             <a href="{% url 'products:product_details' slug=product.slug %}">{{ product.name }}</a>
           </h5>
           <p class="card-text">{{ product.price }} Kč</p>
-          <button type="button" class="btn btn-primary mt-auto">Add to cart</button>
+          <button type="button" data-product = {{product.id}} data-action="add" class="btn btn-primary mt-auto update-cart">Add to cart</button>
         </div>
       </div>
     </div>

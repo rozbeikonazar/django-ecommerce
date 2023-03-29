@@ -8,6 +8,8 @@ from django.contrib.auth.views import PasswordChangeView, PasswordResetView
 from django.contrib.messages.views import SuccessMessageMixin
 from .forms import UpdateUserForm, UpdateProfileForm
 
+
+#TODO FIX TEMPLATES ADD ACCOUNTS FOLDER
 #TODO FIX ERROR MESSAGES and add profile functionality
 def register_request(request):
 	#TODO add email handler to send codes and verificate user
