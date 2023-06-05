@@ -8,10 +8,13 @@ document.addEventListener("DOMContentLoaded", function() {
         console.log('productId:', productId, 'Action:', action);
         console.log('User', user)
         if (user === 'AnonymousUser'){
-            console.log('Not logged in')
+
+          var registerUrl = document.getElementById('register-link').getAttribute('href');
+          window.location.href = registerUrl;
         }
         else {
-            updateUserOrder(productId, action)
+            
+          updateUserOrder(productId, action)
         }
     });
     }
