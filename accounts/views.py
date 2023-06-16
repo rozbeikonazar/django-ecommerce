@@ -9,10 +9,8 @@ from django.contrib.messages.views import SuccessMessageMixin
 from .forms import UpdateUserForm, UpdateProfileForm
 
 
-#TODO FIX TEMPLATES ADD ACCOUNTS FOLDER
-#TODO FIX ERROR MESSAGES and add profile functionality
+
 def register_request(request):
-	#TODO add email handler to send codes and verificate user
 	title = "Registration"
 	if request.method == "POST":
 		form = NewUserForm(request.POST)
@@ -27,8 +25,6 @@ def register_request(request):
 
 
 def login_request(request):
-	#TODO add 2fa on every login request via email. Change username to email to make it more readable
-	#https://python.plainenglish.io/adding-a-custom-authentication-backend-in-django-f0376937cf55
 	title = "Login"
 	if request.method == "POST":
 		form = AuthenticationForm(request, data=request.POST)

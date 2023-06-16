@@ -1,13 +1,10 @@
 from django.test import TestCase
-
-# Create your tests here.
 from django.test import TestCase, Client
 from django.db.utils import IntegrityError
 from django.urls import reverse
 from .models import CustomUser, Profile
 
 
-#TODO Add test for PasswordResetView and fix test_change_password_request
 class UserModelTest(TestCase):
     def setUp(self):
         """

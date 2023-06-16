@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
 from django.core.validators import MinValueValidator
-# Create your models here.
 
 class Category(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -30,5 +29,3 @@ class Product(models.Model):
     
     def __str__(self):
         return f'Product: {self.name}'
-
-#TODO Attributes model

@@ -3,7 +3,6 @@ from django.shortcuts import render
 from .models import Product, Category
 from django.template import loader
 from django.db.models import Q
-# Create your views here.
 
 
 def show_products(request, category_name=None):

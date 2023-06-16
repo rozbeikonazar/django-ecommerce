@@ -3,7 +3,6 @@ from django.db import models
 from accounts.models import Profile
 from products.models import Product
 
-# Create your models here.
 
 
 class Order(models.Model):
