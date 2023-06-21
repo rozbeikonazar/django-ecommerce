@@ -22,7 +22,7 @@
         <p class="total"> Items: <strong> {{order.get_cart_items}} </p>
         <p class="total">Total: {{order.get_cart_total }} CZK</p>
       
-      <button class="checkout-button">Checkout</button>
+        <button class="checkout-button" onclick="location.href='{% url 'cart:checkout' %}'">Checkout</button>
     </div>
   </div>
 
