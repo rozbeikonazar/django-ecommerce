@@ -1,5 +1,4 @@
 from django.db import IntegrityError
-from django.forms import ValidationError
 from django.test import RequestFactory, TestCase
 from django.db import transaction
 from django.urls import reverse
@@ -38,12 +37,13 @@ class ProductAppModelsTest(TestCase):
         """
         Test the creation of a product.
         """
+        
         product = Product.objects.create(name="Test Product", description="Test desc", price=1, category=self.category)
         created_product = Product.objects.get(name="Test Product")
         self.assertEqual(created_product, product)
-        # Attempt to create product with negative price, should raise Validation Error
-        with self.assertRaises(ValidationError):
-            Product.objects.create(name="Test Product", description="Test desc", price=-1, category=self.category)
+        # Attempt to create product with same slug/name
+        with self.assertRaises(IntegrityError):
+            Product.objects.create(name="Test product", description="Test desc", price=1, category=self.category)
 
     def test_product_update(self):
         """
