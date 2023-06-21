@@ -27,7 +27,6 @@ def update_item(request):
     data = json.loads(request.body)
     product_id = data.get('productId')
     action = data.get('action')
-    print(f"action: {action}, productId: {product_id}")
 
     if request.user.is_authenticated:
         user_profile = request.user.profile
