@@ -130,6 +130,20 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+LOGGING = {
+    'version': 1,
+    'handlers': {
+        'console': {'class': 'logging.StreamHandler'},
+                },
+        'loggers': {
+            'django.db.backends': {
+                'handlers': ['console'],
+                'level': 'DEBUG'
+            }
+        }
+}
+
+
 AUTH_USER_MODEL = 'accounts.CustomUser'
 MEDIA_URL = '/images/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
@@ -140,3 +154,15 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = "lupsikuvnorcarc@gmail.com"
 EMAIL_HOST_PASSWORD = "gxxmcqznfyvodmto"
+
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": "redis://redis:6379/0",
+        "OPTIONS": {
+            "db": "1",
+        },
+    }
+}
