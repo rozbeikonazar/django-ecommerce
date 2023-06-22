@@ -5,11 +5,12 @@ from django.template import loader
 from django.db.models import Q
 
 
+
 def show_products(request, category_name=None):
     """Returns all products"""
     products = Product.objects.all()
-    categories = Category.objects.all()
     title = 'Main'
+    
     if category_name:
         category = Category.objects.get(name=category_name)
         title = category.name
@@ -17,7 +18,7 @@ def show_products(request, category_name=None):
 
 
     template = loader.get_template('products/show_products.html')
-    context = {'products': products, 'categories': categories, 'title': title}
+    context = {'products': products, 'title': title}
 
     return HttpResponse(template.render(context, request))
 
@@ -41,7 +42,6 @@ def search_products(request):
                 Q(description__contains=query) |
                 Q(category__name__contains=query)
             )
-            categories = Category.objects.all()
-            return render(request, 'products/search_products.html', {'searched': query, 'products': products, 'categories': categories})
+            return render(request, 'products/search_products.html', {'searched': query, 'products': products})
     return render(request, 'products/search_products.html')
 

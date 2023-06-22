@@ -1,6 +1,9 @@
+from django.conf import settings
 from django.db import models
 from django.utils.text import slugify
 from django.core.validators import MinValueValidator
+from django.core.cache import cache
+
 
 class Category(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -8,8 +11,14 @@ class Category(models.Model):
         verbose_name = "category"
         verbose_name_plural = "categories"
     
+
+    def save(self, *args, **kwargs):
+        cache.delete(settings.CATEGORIES_CACHE)
+        super().save(*args, **kwargs)
+    
     def __str__(self):
         return f"Category: {self.name}"
+
 
 class Product(models.Model):
     name = models.CharField(max_length=100)
