@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
-# Create your models here.
+
 
 
 class CustomUserManager(BaseUserManager):
@@ -39,4 +39,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     
 class Profile(models.Model):
     user = models.OneToOneField(CustomUser, null=True, on_delete=models.CASCADE)
-    profile_image = models.ImageField(default='profile_pic.jpg', null=True, blank=True)                                                                        
+    profile_image = models.ImageField(default='profile_images/profile_pic.jpg', upload_to='profile_images/', null=True, blank=True)  
+
+    def __str__(self):
+        return self.user.email                                                                      

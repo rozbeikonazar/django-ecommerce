@@ -1,14 +1,13 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import get_user_model
 from .models import Profile
-# Create your forms here.
+
 
 class NewUserForm(UserCreationForm):
 
 	class Meta:
 		model = get_user_model()
-		
 		fields = ("email", "name",  "password1", "password2")
 
 	def save(self, commit=True):

@@ -1,0 +1,31 @@
+{% extends 'main.html' %}
+{% block content %}
+  <div class="cart-items">
+    {% for item in items %}
+      <div class="cart-item">
+        <div class="cart-item-image">
+          <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}"  style="width: 150px; height: 150px;">
+        </div>
+        <div class="cart-item-details">
+          <h3>{{ item.product.name }}</h3>
+          <p class="price">Price: {{ item.product.price }} CZK</p>
+          <div class="cart-item-quantity">
+            <label for="quantity">Quantity:</label>
+            <input type="number" name="quantity" id="quantity" value="{{ item.quantity }}">
+          </div>
+          <p class="total"> Total: {{item.get_total}} CZK</p>
+
+        </div>
+      </div>
+    {% endfor %}
+    <div class="cart-total">
+        <p class="total"> Items: <strong> {{order.get_cart_items}} </p>
+        <p class="total">Total: {{order.get_cart_total }} CZK</p>
+      
+        <button class="checkout-button" onclick="location.href='{% url 'cart:checkout' %}'">Checkout</button>
+    </div>
+  </div>
+
+
+
+{% endblock %}

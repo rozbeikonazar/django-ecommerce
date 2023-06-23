@@ -2,7 +2,6 @@ from django.urls import path
 from .views import show_products, show_product, search_products
 
 app_name = 'products'
-#TODO FIX ROUTES for products
 urlpatterns = [
     path('', show_products, name='product_list'),
     path('details/<slug:slug>', show_product, name='product_details'),
