@@ -9,4 +9,5 @@ def categories_processor(request):
     else:
         categories = Category.objects.all()
         cache.set(settings.CATEGORIES_CACHE, categories, 60*60*24)
+    
     return {'categories': categories}

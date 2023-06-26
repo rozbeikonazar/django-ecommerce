@@ -30,7 +30,9 @@ class Product(models.Model):
     
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
-        super(Product, self).save(*args, **kwargs)
+        cache.delete(settings.PRODUCTS_CACHE)
+        cache.delete(f"products_{self.category.name}")
+        super().save(*args, **kwargs)
     
     class Meta:
         verbose_name = "product"

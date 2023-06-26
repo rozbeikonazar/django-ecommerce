@@ -170,3 +170,4 @@ CACHES = {
 }
 
 CATEGORIES_CACHE = 'categories_cache'
+PRODUCTS_CACHE = 'products_cache'
