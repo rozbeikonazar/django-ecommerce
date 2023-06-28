@@ -6,7 +6,7 @@ from django.core.cache import cache
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50, unique=True, db_index=True)
     class Meta:
         verbose_name = "category"
         verbose_name_plural = "categories"
@@ -21,8 +21,8 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.TextField()
+    name = models.CharField(max_length=100, db_index=True)
+    description = models.TextField(db_index=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(1)])
     image = models.ImageField(upload_to='products_images/', null=True)
     slug = models.SlugField(max_length=200,unique=True, null=True, blank=True)
