@@ -6,19 +6,30 @@ from django.views.decorators.cache import cache_page
 from django.conf import settings
 from django.core.paginator import Paginator
 
+def get_products_from_cache(cache_key):
+    """
+    Retrieves product IDs from cache
+    """
+    product_ids = cache.get(cache_key)
+    if product_ids:
+        return Product.objects.filter(id__in=product_ids)
+
+def get_products_from_db(cache_key, queryset=None):
+    if queryset is None:
+            queryset = Product.objects.all()
+    products = queryset
+    product_ids = list(products.values_list('id', flat=True))
+    cache.set(cache_key, product_ids, 60*60*24)
+    return products
+
 def get_cached_products(cache_key, queryset=None):
     """
     Retrieves products from the cache or database
     """
-    product_ids = cache.get(cache_key)
-    if product_ids:
-        products = Product.objects.filter(id__in=product_ids)
-    else:
-        if queryset is None:
-            queryset = Product.objects.all()
-        products = queryset
-        product_ids = list(products.values_list('id', flat=True))
-        cache.set(cache_key, product_ids, 60*60*24)
+    products = get_products_from_cache(cache_key)
+    if not products:
+        products = get_products_from_db(cache_key, queryset)
+
     return products
 
 def get_paginated_products(request, products):
@@ -81,4 +92,5 @@ def search_products(request):
             page_obj = get_paginated_products(request, products)
             context = {'searched': query, 'page_obj': page_obj}
             return render(request, 'products/search_products.html', context)
-    return render(request, 'products/search_products.html')
+
+    return render(request, 'products/search_products.html', context)
