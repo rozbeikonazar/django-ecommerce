@@ -4,10 +4,11 @@ from django.db.models import Q
 from django.core.cache import cache
 from django.views.decorators.cache import cache_page
 from django.conf import settings
+from django.core.paginator import Paginator
 
 def get_cached_products(cache_key, queryset=None):
     """
-    Retrieves products from the cache or database.
+    Retrieves products from the cache or database
     """
     product_ids = cache.get(cache_key)
     if product_ids:
@@ -20,23 +21,35 @@ def get_cached_products(cache_key, queryset=None):
         cache.set(cache_key, product_ids, 60*60*24)
     return products
 
+def get_paginated_products(request, products):
+    """
+    Returns a paginated list of products
+    """
+    paginator = Paginator(products, 10)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    return page_obj
+
 def show_products(request):
     """
     Returns all products
     """
     title = 'Main'
-    cache_key = settings.PRODUCTS_CACHE
-    products = get_cached_products(cache_key)
-
-    context = {'products': products, 'title': title}
+    products_cache_key = settings.PRODUCTS_CACHE
+    products = get_cached_products(products_cache_key)
+    page_obj = get_paginated_products(request, products)
+    context = {'title': title, "page_obj": page_obj}
     return render(request, 'products/show_products.html', context)
 
 def show_products_by_category(request, category_name):
+    """
+    Returns all products specified by category
+    """
     category = get_object_or_404(Category, name=category_name)
-    cache_key = f"products_{category_name}"
-    products = get_cached_products(cache_key, Product.objects.filter(category=category))
-
-    context = {'products': products, 'title': category_name}
+    products_cache_key = f"products_{category_name}"
+    products = get_cached_products(products_cache_key, Product.objects.filter(category=category))
+    page_obj = get_paginated_products(request, products)
+    context = {"page_obj": page_obj, 'title': category_name}
     return render(request, 'products/show_products.html', context)
 
 @cache_page(60*15)
@@ -57,13 +70,15 @@ def search_products(request):
     if request.method == "POST":
         query = request.POST.get('searched')
         if query:
-            cache_key = f'search_products_{query}'
-            products = get_cached_products(cache_key,
+            products_cache_key = f'search_products_{query}'
+            products = get_cached_products(products_cache_key,
                 Product.objects.filter(
                     Q(name__icontains=query) |
                     Q(description__icontains=query) |
                     Q(category__name__icontains=query)
                 )
             )
-            return render(request, 'products/search_products.html', {'searched': query, 'products': products})
+            page_obj = get_paginated_products(request, products)
+            context = {'searched': query, 'page_obj': page_obj}
+            return render(request, 'products/search_products.html', context)
     return render(request, 'products/search_products.html')
