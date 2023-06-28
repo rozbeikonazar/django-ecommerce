@@ -58,7 +58,7 @@ def show_products_by_category(request, category_name):
     """
     category = get_object_or_404(Category, name=category_name)
     products_cache_key = f"products_{category_name}"
-    products = get_cached_products(products_cache_key, Product.objects.filter(category=category))
+    products = get_cached_products(products_cache_key, Product.objects.select_related('category').filter(category=category))
     page_obj = get_paginated_products(request, products)
     context = {"page_obj": page_obj, 'title': category_name}
     return render(request, 'products/show_products.html', context)
