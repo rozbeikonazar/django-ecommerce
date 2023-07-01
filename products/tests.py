@@ -1,10 +1,11 @@
 from django.db import IntegrityError
 from django.forms import ValidationError
+from django.http import Http404
 from django.test import RequestFactory, TestCase
 from django.db import transaction
 from django.urls import reverse
 from products.models import Product, Category
-from products.views import search_products, show_product, show_products
+from products.views import search_products, show_product, show_products, show_products_by_category
 
 class ProductAppModelsTest(TestCase):
     def setUp(self):
@@ -38,12 +39,17 @@ class ProductAppModelsTest(TestCase):
         """
         Test the creation of a product.
         """
+        # Valid creation
         product = Product.objects.create(name="Test Product", description="Test desc", price=1, category=self.category)
         created_product = Product.objects.get(name="Test Product")
         self.assertEqual(created_product, product)
+
         # Attempt to create product with negative price, should raise Validation Error
         with self.assertRaises(ValidationError):
-            Product.objects.create(name="Test Product", description="Test desc", price=-1, category=self.category)
+            invalid_product = Product.objects.create(name="Test Product negative price", description="Test desc", price=-1, category=self.category)
+            invalid_product.full_clean()
+            invalid_product.save()
+
 
     def test_product_update(self):
         """
@@ -102,6 +108,22 @@ class ProductViewsTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Test Product")
     
+    def test_show_products_by_category(self):
+        """
+        Test for displaying products specified by category
+        """
+        url = reverse("products:category", args=[self.category])
+        request = self.factory.get(url)
+        response = show_products_by_category(request, category_name=self.category.name)
+        self.assertEqual(response.status_code, 200)
+
+        # Attempt to get products with non existing category, should raise 404
+        url = reverse("products:category", args=['not-existing-category'])
+        request = self.factory.get(url)
+        with self.assertRaises(Http404):
+            show_products_by_category(request, category_name="not-existing-category")
+        
+    
     def test_show_product(self):
         """
         Test for displaying product.
@@ -112,6 +134,12 @@ class ProductViewsTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Test Product")
 
+        # Attempt to get product with non existing slug, should raise 404
+        url = reverse("products:product_details", args=['not-existing-slug'])
+        request = self.factory.get(url)
+        with self.assertRaises(Http404):
+            show_product(request, slug="not-existing-slug" )
+
     def test_search_products(self):
         """
         Test for searching products.
@@ -121,7 +149,7 @@ class ProductViewsTest(TestCase):
         response = search_products(request)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Test Product")
-        #not existing product
+        # Not existing product
         request = self.factory.post(url, {"searched": "not existing"})
         response = search_products(request)
         self.assertEqual(response.status_code, 200)

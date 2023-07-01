@@ -92,5 +92,5 @@ def search_products(request):
             page_obj = get_paginated_products(request, products)
             context = {'searched': query, 'page_obj': page_obj}
             return render(request, 'products/search_products.html', context)
-
+    context = {'page_obj': None}
     return render(request, 'products/search_products.html', context)
