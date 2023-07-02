@@ -11,7 +11,9 @@
           <p class="price">Price: {{ item.product.price }} CZK</p>
           <div class="cart-item-quantity">
             <label for="quantity">Quantity:</label>
-            <input type="number" name="quantity" id="quantity" value="{{ item.quantity }}">
+            <input type="number"name="quantity" id="quantity_{{ item.product.id }}" value="{{ item.quantity }}">
+            <button class="update-cart" data-product="{{ item.product.id }}" data-action="add">+</button>
+            <button class="update-cart"data-product="{{ item.product.id }}"data-action="remove">-</button>
           </div>
           <p class="total"> Total: {{item.get_total}} CZK</p>
 

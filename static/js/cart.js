@@ -21,21 +21,32 @@ document.addEventListener("DOMContentLoaded", function() {
   });
   
   function updateUserOrder(productId, action) {
-    console.log('User is logged in, sending data..')
-    var url = '/cart/update_item/'
+    console.log('User is logged in, sending data..');
+    var url = '/cart/update_item/';
     fetch(url, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": csrftoken,
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrftoken,
       },
-      body: JSON.stringify({"productId": productId, 'action': action })
+      body: JSON.stringify({ productId: productId, action: action }),
     })
-    .then((response) => {
-      return response.json()
-    })
-    .then((data) => {
-      console.log('data:', data)
-      location.reload()
-    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('data:', data);
+  
+
+        var quantityElement = document.getElementById('quantity_' + productId);
+        quantityElement.innerText = data.quantity;
+  
+        var totalElement = document.getElementById('total_' + productId);
+        totalElement.innerText = data.total;
+  
+        var cartItemsElement = document.getElementById('cart-items');
+        cartItemsElement.innerText = data.cart_items;
+  
+        var cartTotalElement = document.getElementById('cart-total');
+        cartTotalElement.innerText = data.cart_total;
+      });
   }
+  
