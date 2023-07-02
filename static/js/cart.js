@@ -5,8 +5,6 @@ document.addEventListener("DOMContentLoaded", function() {
       updateBtns[i].addEventListener('click', function() {
         var productId = this.dataset.product;
         var action = this.dataset.action;
-        console.log('productId:', productId, 'Action:', action);
-        console.log('User', user)
         if (user === 'AnonymousUser'){
 
           var registerUrl = document.getElementById('register-link').getAttribute('href');
@@ -21,7 +19,6 @@ document.addEventListener("DOMContentLoaded", function() {
   });
   
   function updateUserOrder(productId, action) {
-    console.log('User is logged in, sending data..');
     var url = '/cart/update_item/';
     fetch(url, {
       method: 'POST',
@@ -33,9 +30,6 @@ document.addEventListener("DOMContentLoaded", function() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log('data:', data);
-  
-
         var quantityElement = document.getElementById('quantity_' + productId);
         quantityElement.innerText = data.quantity;
   

@@ -8,7 +8,7 @@ def get_order_items(request):
     if request.user.is_authenticated:
         user_profile = request.user.profile
         order, _ = Order.objects.get_or_create(user_profile=user_profile)
-        items = order.orderitem_set.all()
+        items = order.orderitem_set.all().order_by('id')
     else:
         items = []
         order = {'get_cart_total': 0, 'get_cart_items': 0}
