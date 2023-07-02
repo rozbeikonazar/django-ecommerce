@@ -1,5 +1,4 @@
 from django.db import models
-
 from accounts.models import Profile
 from products.models import Product
 
@@ -27,18 +26,20 @@ class Order(models.Model):
     
 
 class OrderItem(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, blank=True, null=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True)
     order = models.ForeignKey(Order, on_delete=models.SET_NULL, blank=True, null=True)
     quantity = models.IntegerField(default=0, blank=True, null=True)
-    
 
     @property
     def get_total(self):
-        total = self.product.price * self.quantity
-        return total
+        if self.product:
+            total = self.product.price * self.quantity
+            return total
+        return 0
 
     def __str__(self):
         return f"Product name: {self.product.name}"
+
 
 class ShippingAddress(models.Model):
     user_profile = models.ForeignKey(Profile, on_delete=models.SET_NULL, blank=True, null=True)
