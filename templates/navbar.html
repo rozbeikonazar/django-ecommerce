@@ -23,7 +23,6 @@
         <a href="{% url 'cart:cart' %}">
           <img id="cart-icon" src="{% static 'images/site_images/cart_image.jpg' %}" style="width: 50px; height: 50px;">
         </a>
-        <p id="cart-total">{{cartItems}}</p>
         
           
           <form class="d-flex" method=POST action="{% url 'products:search_products' %}">
