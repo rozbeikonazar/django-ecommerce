@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from products.models import Product
 from .models import Order, OrderItem
-
+from django.contrib.auth.decorators import login_required
 def get_order_items(request):
     if request.user.is_authenticated:
         user_profile = request.user.profile
@@ -14,15 +14,18 @@ def get_order_items(request):
         order = {'get_cart_total': 0, 'get_cart_items': 0}
     return items, order
 
+@login_required
 def cart(request):
     title = "Cart"
     items, order = get_order_items(request)
     return render(request, 'cart/cart.html', context={'items': items, 'order': order, 'title': title})
 
+@login_required
 def checkout(request):
     items, order = get_order_items(request)
     return render(request, 'cart/checkout.html', context={'items': items, 'order': order})
 
+@login_required
 def update_item(request):
     data = json.loads(request.body)
     product_id = data.get('productId')
