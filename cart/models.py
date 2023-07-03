@@ -5,9 +5,17 @@ from products.models import Product
 
 
 class Order(models.Model):
+    ORDER_STATUSES = (
+        ('cart', 'Cart'),
+        ('pending', 'Pending'),
+        ('processing', 'Processing'),
+        ('shipped', 'Shipped'),
+        ('delivered', 'Delivered'),
+        ('cancelled', 'Cancelled'),
+        )
     user_profile = models.ForeignKey(Profile, on_delete=models.SET_NULL, blank=True, null=True)
     date_ordered = models.DateTimeField(auto_now_add=True)
-    complete = models.BooleanField(default=False, null=True, blank=False)
+    order_status = models.BooleanField(choices=ORDER_STATUSES, max_length=50, default=False)
     transaction_id = models.CharField(max_length=200, null=True)
     
     @property 
