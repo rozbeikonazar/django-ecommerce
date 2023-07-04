@@ -40,17 +40,23 @@ def update_item(request):
         product = Product.objects.get(id=product_id)
         order, _ = Order.objects.get_or_create(user_profile=user_profile)
         order_item, _ = OrderItem.objects.get_or_create(order=order, product=product)
-        if action == 'add':
+        
+        if action == 'add' and order_item.quantity < product.quantity:
             order_item.quantity += 1
-        elif action == "remove":
+        elif action == 'remove':
             order_item.quantity -= 1
+        
         order_item.save()
-
-        if order_item.quantity <= 0:
+        
+        if order_item.quantity <= 0 or product.quantity <= 0:
             order_item.delete()
-        return JsonResponse("Item was added", safe=False)
+
+        
+
+        return JsonResponse("Item was updated", safe=False)
     else:
         return JsonResponse("User is not authenticated", safe=False)
+
 
 
 def process_order(request):
@@ -76,14 +82,9 @@ def process_order(request):
                 city=city, 
                 zipcode=zipcode
             )
-
             order.order_status = 'processing'
             change_products_quantity(items)
-            order.orderitem_set.all().delete()
             order.save()
-            
-            
-            
             return redirect('cart:success', order_id=order.id, shipping_address_id = shipping_address.id)
 
         else:
@@ -99,4 +100,5 @@ def success_order(request, order_id, shipping_address_id):
     shipping_address = get_object_or_404(ShippingAddress, id=shipping_address_id, user_profile=request.user.profile)
     order_items = PurchaseItem.objects.filter(order_id=order_id)
     context = {'order': order, 'shipping_address': shipping_address, "order_items": order_items}
+    order.orderitem_set.all().delete()
     return render(request, "cart/success_order.html", context)

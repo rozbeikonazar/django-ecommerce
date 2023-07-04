@@ -21,12 +21,22 @@ class Order(models.Model):
     @property 
     def get_cart_total(self):
         orderitems = self.orderitem_set.all()
-        total = sum([item.get_total for item in orderitems])
+        total = 0
+        for item in orderitems:
+            if item.quantity <= 0 or item.product.quantity <= 0:
+                item.delete()
+            else:
+                total += item.get_total
         return total
     @property
     def get_cart_items(self):
         orderitems = self.orderitem_set.all()
-        total = sum([item.quantity for item in orderitems])
+        total = 0
+        for item in orderitems:
+            if item.quantity <= 0 or item.product.quantity <= 0:
+                item.delete()
+            else:
+                total += 1
         return total
 
     def __str__(self):
