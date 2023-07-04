@@ -26,7 +26,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(1)])
     quantity = models.IntegerField(default=0)
     image = models.ImageField(upload_to='products_images/', null=True)
-    slug = models.SlugField(max_length=200,unique=True, null=True, blank=True)
+    slug = models.SlugField(max_length=200, unique=True, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     
     def save(self, *args, **kwargs):

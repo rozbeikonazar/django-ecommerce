@@ -94,3 +94,10 @@ def search_products(request):
             return render(request, 'products/search_products.html', context)
     context = {'page_obj': None}
     return render(request, 'products/search_products.html', context)
+
+
+def change_products_quantity(items):
+    for item in items:
+        product = item.product
+        product.quantity -= item.quantity
+        product.save()

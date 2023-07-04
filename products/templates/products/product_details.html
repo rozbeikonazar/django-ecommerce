@@ -21,19 +21,19 @@
             <div class="row">
                 <div class="col-md-6">
                     <p><strong>Price:</strong> <span class="text-danger">{{ product.price }}</span></p>
-                    <p><strong>Availability:</strong> {% if product.available %}In Stock{% else %}Out of Stock{% endif %}</p>
                 </div>
-                <div class="col-md-6">
-                    <p><strong>Brand:</strong> {{ product.brand }}</p>
-                    <p><strong>Model:</strong> {{ product.model }}</p>
-                </div>
+
             </div>
             <hr>
             <div class="row">
                 <div class="col-md-12">
                     <form method="POST" action="#">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-primary btn-lg">Buy Now</button>
+                        {% if product.quantity %}
+                            <button type="button" data-product = {{product.id}} data-action="add" class="btn btn-primary mt-auto update-cart">Add to cart</button>
+                        {% else %}
+                            <button type="button" class="btn btn-secondary mt-auto" disabled>Out of stock</button>
+                        {% endif %}
                     </form>
                 </div>
             </div>

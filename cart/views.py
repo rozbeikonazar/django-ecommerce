@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.http import JsonResponse
 from cart.forms import DeliveryInformationForm
 from products.models import Product
+from products.views import change_products_quantity
 from .models import Order, OrderItem, PurchaseItem, ShippingAddress
 from django.contrib.auth.decorators import login_required
 
@@ -77,16 +78,12 @@ def process_order(request):
             )
 
             order.order_status = 'processing'
-            
-
+            change_products_quantity(items)
+            order.orderitem_set.all().delete()
             order.save()
-            # change_product_quantity(items):
-            #     for item in items:
-            #       product = item.product
-            #       product.quantity -= item.quantity
-            #       product.save()
-
-            order.orderitem_set.clear()
+            
+            
+            
             return redirect('cart:success', order_id=order.id, shipping_address_id = shipping_address.id)
 
         else:
