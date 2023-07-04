@@ -15,7 +15,7 @@ class Order(models.Model):
         )
     user_profile = models.ForeignKey(Profile, on_delete=models.SET_NULL, blank=True, null=True)
     date_ordered = models.DateTimeField(auto_now_add=True)
-    order_status = models.BooleanField(choices=ORDER_STATUSES, max_length=50, default=False)
+    order_status = models.CharField(choices=ORDER_STATUSES, max_length=50, default=False)
     transaction_id = models.CharField(max_length=200, null=True)
     
     @property 
@@ -31,6 +31,14 @@ class Order(models.Model):
 
     def __str__(self):
         return f"ID: {self.id}"
+    
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.order_status == 'processing':
+            # Create PurchaseItem instances for each OrderItem and associate them with the order
+            order_items = self.orderitem_set.all()
+            for order_item in order_items:
+                PurchaseItem.objects.create(order=self, product=order_item.product, quantity=order_item.quantity)
     
 
 class OrderItem(models.Model):
@@ -52,10 +60,21 @@ class OrderItem(models.Model):
 class ShippingAddress(models.Model):
     user_profile = models.ForeignKey(Profile, on_delete=models.SET_NULL, blank=True, null=True)
     order = models.ForeignKey(Order, on_delete=models.SET_NULL, blank=True, null=True)
+    name = models.CharField(max_length=200, null=True)
+    email = models.EmailField(max_length=200, null=True)
     address = models.CharField(max_length=200, null=True)
+    country = models.CharField(max_length=200, null=True)
     city = models.CharField(max_length=200, null=True)
-    state = models.CharField(max_length=200, null=True)
     zipcode = models.CharField(max_length=200, null=True)
+
 
     def __str__(self):
         return self.address
+    
+class PurchaseItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"Order ID: {self.order.id}, Product: {self.product.name}, Quantity: {self.quantity}"
