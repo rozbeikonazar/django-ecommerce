@@ -11,6 +11,9 @@ from .forms import UpdateUserForm, UpdateProfileForm
 
 
 def register_request(request):
+	"""
+	Handle registration request
+	"""
 	title = "Registration"
 	if request.method == "POST":
 		form = NewUserForm(request.POST)
@@ -25,6 +28,9 @@ def register_request(request):
 
 
 def login_request(request):
+	"""
+	Handle login request
+	"""
 	title = "Login"
 	if request.method == "POST":
 		form = AuthenticationForm(request, data=request.POST)
@@ -44,17 +50,25 @@ def login_request(request):
 
 @login_required
 def logout_request(request):
+	"""
+	Handle logout request"""
 	logout(request)
 	messages.info(request, "You have successfull loged out")
 	return redirect("products:product_list")
 
 @login_required
 def profile_request(request):
+	"""
+    Handle profile request
+    """
 	title = "Profile"
 	return render(request=request, template_name='profile.html', context={'title': title})
 
 @login_required
 def edit_profile(request):
+	"""
+	Handle edit profile request and update user information
+	"""
 	title = "Edit Profile"
 	if request.method == 'POST':
 		user_form = UpdateUserForm(request.POST, instance=request.user)
@@ -70,12 +84,18 @@ def edit_profile(request):
 	return render(request, 'edit_profile.html', {'user_form': user_form, 'profile_form' : profile_form, 'title': title})
 
 class ChangePasswordView(SuccessMessageMixin, PasswordChangeView):
-    template_name = 'change_password.html'
-    success_message = "Successfully Changed Your Password"
-    success_url = reverse_lazy('accounts:edit_profile')
+	"""
+	View for changing password
+	"""
+	template_name = 'change_password.html'
+	success_message = "Successfully Changed Your Password"
+	success_url = reverse_lazy('accounts:edit_profile')
     
 
 class PasswordResetView(SuccessMessageMixin, PasswordResetView):
+	"""
+	View for password reset
+	"""
 	template_name = 'reset_password.html'
 	email_template_name = 'reset_password_email.html'
 	success_message = "We've emailed you instructions for setting your password, " \
