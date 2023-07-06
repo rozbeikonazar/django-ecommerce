@@ -19,7 +19,7 @@ def set_order_items(cart_items, order):
 
 def get_cart_items(request):
     """
-    Get the cart items for the give
+    Retrieve the cart items for the given user
     """
     if request.user.is_authenticated:
         user_profile = request.user.profile
