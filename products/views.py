@@ -12,11 +12,11 @@ def get_products_from_cache(cache_key):
     """
     product_ids = cache.get(cache_key)
     if product_ids:
-        return Product.objects.filter(id__in=product_ids)
+        return Product.objects.filter(id__in=product_ids).order_by('-quantity')
 
 def get_products_from_db(cache_key, queryset=None):
     if queryset is None:
-            queryset = Product.objects.all()
+            queryset = Product.objects.all().order_by('-quantity')
     products = queryset
     product_ids = list(products.values_list('id', flat=True))
     cache.set(cache_key, product_ids, 60*60*24)
@@ -96,7 +96,10 @@ def search_products(request):
     return render(request, 'products/search_products.html', context)
 
 
-def change_products_quantity(items):
+def update_products_quantity(items):
+    """
+    Update the quantity of products based on the cart items
+    """
     for item in items:
         product = item.product
         product.quantity -= item.quantity

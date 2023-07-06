@@ -1,6 +1,9 @@
+{% extends 'main.html' %}
+
+{% block content %}
 <h1>Thanks for the order!</h1>
 
-<p> Your shipping infromation: {{shipping_address}} <p>
+<p> Your shipping infromation: {{shipping_address.country}} {{shipping_address.city}} {{shipping_address.address}} <p>
 <p>Order time: {{ order.date_ordered }}</p>
 <h3>Purchased Items:</h3>
 <ul>
@@ -11,3 +14,4 @@
 {% endfor %}
 <a  class="btn btn-outline-dark" href="{% url 'products:product_list' %}">&#x2190; Back to Main Menu</a>
 </ul>
+{% endblock %}
