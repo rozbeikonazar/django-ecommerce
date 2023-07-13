@@ -42,4 +42,4 @@ class Profile(models.Model):
     profile_image = models.ImageField(default='profile_images/profile_pic.jpg', upload_to='profile_images/', null=True, blank=True)  
 
     def __str__(self):
-        return self.user.email                                                                      
+        return self.user.email

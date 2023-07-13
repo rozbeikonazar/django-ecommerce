@@ -68,7 +68,7 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"Order id: {self.order.id}, Product name: {self.product.name}"
-
+    
 
 class ShippingAddress(models.Model):
     user_profile = models.ForeignKey(Profile, on_delete=models.SET_NULL, blank=True, null=True)
