@@ -25,6 +25,8 @@ def get_cart_items(request):
         user_profile = request.user.profile
         cart, _ = Cart.objects.get_or_create(user_profile=user_profile)
         items = cart.cartitem_set.all().order_by('id')
+        #Clear Cart Items
+        cart.delete_invalid_cart_items
     else:
         items = []
         cart = {'get_cart_total': 0, 'get_cart_items': 0}
@@ -67,6 +69,7 @@ def update_item(request):
         cart, _ =  Cart.objects.get_or_create(user_profile=user_profile)
         cart_item, _ = CartItem.objects.get_or_create(cart=cart, product=product)
         
+        
         if action == 'add' and cart_item.quantity < product.quantity:
             cart_item.quantity += 1
         elif action == 'remove':
@@ -75,7 +78,7 @@ def update_item(request):
         cart_item.save()
         
         if cart_item.quantity <= 0 or product.quantity <= 0:
-            cart_item.delete()
+            cart.delete_invalid_cart_items(cart_item)
 
         
 

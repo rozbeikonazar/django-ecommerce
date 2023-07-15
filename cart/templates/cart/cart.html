@@ -1,6 +1,6 @@
 {% extends 'main.html' %}
 {% block content %}
-  <div class="cart-items">
+<div class="cart-items">
     {% for item in items %}
     {% if item.product.quantity%}  
     <div class="cart-item">
@@ -25,7 +25,7 @@
     {% endfor %}
     <div class="cart-total">
         <p class="total"> Items: <strong> {{cart.get_cart_items}} </p>
-        <p class="total">Total: {{cart.get_cart_total }} CZK</p>
+        <p class="total">Total: {{cart.calculate_cart_total }} CZK</p>
       
         <a href="{% url 'cart:checkout' %}"><button class="checkout-button">Checkout</button></a>
     </div>

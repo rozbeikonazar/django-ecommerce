@@ -12,6 +12,7 @@
     <p>Quantity: {{ order_item.quantity }}</p>
     
 {% endfor %}
+<h5>Total: {{order.calculate_order_total}} CZK <h5>
 <a  class="btn btn-outline-dark" href="{% url 'products:product_list' %}">&#x2190; Back to Main Menu</a>
 </ul>
 {% endblock %}
